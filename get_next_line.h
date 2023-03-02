@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:46:02 by fras          #+#    #+#                 */
-/*   Updated: 2023/02/26 18:46:03 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/02 17:03:39 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+# define BUFFER_SIZE 64
+
 char	*get_next_line(int fd);
+int		newline_in_buffer(char *buffer);
 
 #endif
