@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/02 21:34:36 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/02 22:33:50 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*get_next_line(int fd)
 	size_t		STORAGE_SIZE;
 	int			newline_position;
 
-	STORAGE_SIZE = 64;
+	// STORAGE_SIZE = 64;
 	// storage = malloc(STORAGE_SIZE * sizeof(char));
 	storage[fd] = buffering(fd, &buffer, BUFFER_SIZE);
 	while ()
@@ -42,27 +42,47 @@ char	*get_next_line(int fd)
 	saveline(buffer, line, newline_position);
 }
 
-size_t	buffering(int fd, char *buffer, size_t BUFFER_SIZE)
+char	*buffering(int fd, char *buffer, size_t BUFFER_SIZE)
 {
 	int 	newline_found;
-	int		READ_STATUS;
-	size_t	total_bytes;
+	size_t	READ_STATUS;
+	size_t	size;
+	size_t	size_previous;
 	char	*storage;
 
 	newline_found = 0;
-	total_bytes = 0;
-	i = 0;
-	while(!newline_found && !READ_STATUS <= 0)
+	size = 0;
+	size_previous = 0;
+	storage = NULL;
+	READ_STATUS = read(fd, buffer, BUFFER_SIZE);
+	while (!newline_found && !READ_STATUS <= 0)
 	{
-		READ_STATUS = read(fd, buffer, BUFFER_SIZE);
+		size += READ_STATUS;
 		newline_found = newline_checker(buffer, BUFFER_SIZE);
-		save_buffer()
-		total_bytes += READ_STATUS;
-		savebuffer
-		i = 0;
+		storage = save_buffer(buffer, size, size_previous);
+		size_previous = size;
+		READ_STATUS = read(fd, buffer, BUFFER_SIZE);
 	}
-	return (buffer_status(newline_found, READ_STATUS, total_bytes));
+	if (READ_STATUS == -1)
+		return (-1);
+	return (storage);
 }
+
+void save_buffer(char *buffer, size_t size, size_t size_previous)
+{
+	char	*storage;
+	size_t	i;
+
+	if (!size_previous)
+	{
+		storage = malloc(size * sizeof(char));
+		while (i < size)
+		{
+			
+		}
+	}
+}
+
 
 int	newline_checker(char *search, size_t BUFFER_SIZE)
 {
@@ -71,23 +91,16 @@ int	newline_checker(char *search, size_t BUFFER_SIZE)
 	while (i <= BUFFER_SIZE)
 	{
 		if (search[i] == '\n')
-			return(1);
+			return (1);
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
 
-void	buffer_status (int newline_found, int READ_STATUS, size_t total_bytes)
+void	buffer_status (int newline_found, int READ_STATUS, size_t size)
 {
 	if
-}
-
-void savebuffer(char *buffer, char *dest, int newline_pos)
-{
-	int i;
-
-	while (buffer[i] != '\n')
 }
 
 void saveline(char *buffer, char *dest, int newline_pos)
