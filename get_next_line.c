@@ -6,17 +6,11 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 20:55:03 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 20:57:16 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-/*Note to self:
-To handle multiple file descriptors, I am going to use a double array. First dimension is OPEN_MAX. Then I use the fd value to call the specific pointer ( [fd] ).
-Like:
-static char	*storage[OPEN_MAX];
-pointer = storage[fd];
-*/
 #include "get_next_line.h"
 
 char	*get_next_line(int fd)
@@ -24,10 +18,10 @@ char	*get_next_line(int fd)
 	char		buffer[size];
 	static char	*leftover[OPEN_MAX];
 	char		*saved_read;
-	//size_t		saved_read_size;
+
 	char		*line;
 
-	/*saved_read_size =*/ buffering(saved_read, fd, buffer, BUFFER_SIZE);
+	buffering(saved_read, fd, buffer, BUFFER_SIZE);
 	line = extract_line(saved_read, leftover[fd]);
 }
 
@@ -47,7 +41,7 @@ char *extract_line(char *source, char *leftover)
 	
 }
 
-/*size_t*/ void	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
+void	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 {
 	size_t	READ_STATUS;
 	size_t	size;
