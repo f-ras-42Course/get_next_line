@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 23:04:10 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 23:06:55 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*save_buffer(char *buffer, char *dest, size_t prev_size, size_t size)
 }
 
 
-char *extract_line(char *source, char *leftover, size_t size)
+char	*extract_line(char *source, char *leftover, size_t size)
 {
 	char	*line;
 	size_t	newline_pos;

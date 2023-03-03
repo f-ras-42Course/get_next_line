@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 22:56:04 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 23:09:53 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ size_t	newline_checker(char *search, size_t size)
 	return (0);
 }
 
-void	to_string_alloc(char *src, char *dest, size_t size)
+char	*to_string_alloc(char *src, char *dest, size_t size)
 {
 	size_t	i;
 
@@ -39,7 +39,7 @@ void	to_string_alloc(char *src, char *dest, size_t size)
 	return (dest);
 }
 
-void	to_string_realloc(char *src, char *dest, size_t size)
+char	*to_string_realloc(char *src, char *dest, size_t size)
 {
 	char	*backup;
 	size_t	i;
@@ -47,9 +47,12 @@ void	to_string_realloc(char *src, char *dest, size_t size)
 
 	i = 0;
 	j = 0;
-	backup = reallocate(src, dest, size);
+	backup = reallocate(dest, size);
 	if (!backup)
+	{
 		free(dest);
+		return (NULL);
+	}
 	while (backup[i])
 		dest[i] = backup[i++];
 	while (i < size)
@@ -59,7 +62,7 @@ void	to_string_realloc(char *src, char *dest, size_t size)
 	return (dest);
 }
 
-char	*reallocate(char *src, char *dest, size_t size);
+char	*reallocate(char *dest, size_t size)
 {
 	char	*backup;
 	size_t	i;
