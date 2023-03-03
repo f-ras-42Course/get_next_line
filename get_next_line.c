@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 23:00:42 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 23:04:10 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ char	*get_next_line(int fd)
 	if (size <= 0)
 		return (NULL);
 	line = extract_line(storage, leftover[fd], size);
+	return (line);
 }
 
 size_t	buffering(char *buffer, char *dest, int fd, size_t BUFFER_SIZE)
