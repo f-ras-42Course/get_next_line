@@ -6,26 +6,32 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 20:57:16 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 21:04:57 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+/*Note to self:
+To handle multiple file descriptors, I am going to use a double array. First dimension is OPEN_MAX. Then I use the fd value to call the specific pointer ( [fd] ).
+Like:
+static char	*storage[OPEN_MAX];
+pointer = storage[fd];
+*/
 #include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
-	char		buffer[size];
 	static char	*leftover[OPEN_MAX];
+	char		buffer[BUFFER_SIZE];
 	char		*saved_read;
-
 	char		*line;
+	size_t		size;
 
-	buffering(saved_read, fd, buffer, BUFFER_SIZE);
-	line = extract_line(saved_read, leftover[fd]);
+	size = buffering(saved_read, fd, buffer, BUFFER_SIZE);
+	line = extract_line(saved_read, leftover[fd], size);
 }
 
-char *extract_line(char *source, char *leftover)
+char *extract_line(char *source, char *leftover, size_t size)
 {
 	char	*line;
 	size_t	newline_position;
@@ -41,7 +47,7 @@ char *extract_line(char *source, char *leftover)
 	
 }
 
-void	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
+size_t	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 {
 	size_t	READ_STATUS;
 	size_t	size;
@@ -61,7 +67,7 @@ void	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 	}
 	if (READ_STATUS == -1)
 		return (-1);
-	// return (size);
+	return (size);
 }
 
 void	save_buffer(char *buffer, char *dest, size_t prev_size, size_t size)
