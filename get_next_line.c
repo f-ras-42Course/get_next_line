@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 21:08:03 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 21:08:41 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ char *extract_line(char *source, char *leftover, size_t size)
 	newline_position = newline_checker(source, size);
 	if (!newline_position)
 	{
-		source[size] = '\0';
 		leftover = 0;
 		return (source);
 	}
