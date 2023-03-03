@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 13:43:26 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 15:35:45 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,14 @@ char	*get_next_line(int fd)
 	line = extract_line(saved_read, &leftover[fd], saved_read_size);
 }
 
-char *extract_line(char *)
+char *extract_line(char *source, char *leftover_chars, size_t size)
+{
+	size_t newline_position;
+
+	newline_position = newline_checker(source, size);
+	if (!newline_position)
+		
+}
 
 size_t	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 {
@@ -42,8 +49,7 @@ size_t	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 
 	size = 0;
 	prev_size = 0;
-	dest = NULL;
-	READ_STATUS = read(fd, buffer, size);
+	READ_STATUS = read(fd, buffer, BUFFER_SIZE);
 	while (!newline && !READ_STATUS <= 0)
 	{
 		size += READ_STATUS;
@@ -68,7 +74,7 @@ size_t	save_buffer(char *dest, char *buffer, size_t size, size_t prev_size)
 	{
 		dest = malloc((size + 1) * sizeof(char));
 		while (i < size)
-			dest[i] = buffer[i++];
+			dest[i] = buffer[i++]; // eventually change to allocated_memcpy(dest, buffer, size) -> return value = size
 		return (i);
 	}
 	backup = malloc(prev_size * sizeof(char));
