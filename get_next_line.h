@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:46:02 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/02 19:30:31 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 12:00:10 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@
 char	*get_next_line(int fd);
 int		newline_in_buffer(char *buffer);
 void	buffer_status (int newline_found, READ_STATUS)
+char	*buffering(int fd, char *buffer, size_t BUFFER_SIZE, int *newline);
 
 #endif

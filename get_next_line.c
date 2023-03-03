@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/02 23:48:53 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 13:43:26 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,107 +21,80 @@ pointer = storage[fd];
 
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE];
-	static char	*storage[OPEN_MAX];
+	char		buffer[size];
+	static char	*leftover[OPEN_MAX];
+	char		*saved_read;
+	size_t		saved_read_size;
 	char		*line;
-	size_t		STORAGE_SIZE;
-	int			newline_position;
 
-	// STORAGE_SIZE = 64;
-	// storage = malloc(STORAGE_SIZE * sizeof(char));
-	storage[fd] = buffering(fd, &buffer, BUFFER_SIZE);
-	while ()
-	{
-		savebuffer()
-		//Save to Storage -> Rebuffer -> Enough storage? ->
-		// Save to storage -> else realloc untill enough storage -> save to storage. 
-	}
-	if (newline_position >= STORAGE_SIZE)
-	{
-		
-	}
-	saveline(buffer, line, newline_position);
+	saved_read_size = buffering(saved_read, fd, buffer, BUFFER_SIZE);
+	line = extract_line(saved_read, &leftover[fd], saved_read_size);
 }
 
-char	*buffering(int fd, char *buffer, size_t BUFFER_SIZE)
+char *extract_line(char *)
+
+size_t	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
 {
-	int 	newline;
 	size_t	READ_STATUS;
 	size_t	size;
-	size_t	previous_size;
-	char	*storage;
+	size_t	prev_size;
+	size_t	*newline
 
-	newline = 0;
 	size = 0;
-	previous_size = 0;
-	storage = NULL;
-	READ_STATUS = read(fd, buffer, BUFFER_SIZE);
+	prev_size = 0;
+	dest = NULL;
+	READ_STATUS = read(fd, buffer, size);
 	while (!newline && !READ_STATUS <= 0)
 	{
 		size += READ_STATUS;
-		newline = newline_checker(buffer, BUFFER_SIZE);
-		savebuffer(&storage, buffer, size, previous_size);
-		previous_size = size;
-		READ_STATUS = read(fd, buffer, BUFFER_SIZE);
+		newline = newline_checker(buffer, size);
+		save_buffer(dest, buffer, size, prev_size);
+		prev_size = size;
+		READ_STATUS = read(fd, buffer, size);
 	}
 	if (READ_STATUS == -1)
 		return (-1);
-	return (storage);
+	return (size);
 }
 
-void savebuffer(char **storage, char *buffer, size_t size, size_t previous_size)
+size_t	save_buffer(char *dest, char *buffer, size_t size, size_t prev_size)
 {
-	char	*line;
 	char	*backup;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	if (!previous_size)
+	if (!prev_size)
 	{
-		*storage = malloc(size * sizeof(char));
+		dest = malloc((size + 1) * sizeof(char));
 		while (i < size)
-			storage[i] = buffer[i++];
-		return;
+			dest[i] = buffer[i++];
+		return (i);
 	}
-	backup = malloc(previous_size * sizeof(char));
-	while (i < previous_size)
-		backup[i] = *storage[i++];
+	backup = malloc(prev_size * sizeof(char));
+	while (i < prev_size)
+		backup[i] = dest[i++];
 	i = 0;
 	j = 0;
-	free (*storage);
-	storage = malloc(size * sizeof(char));
-	while (i < previous_size)
+	free (dest);
+	storage = malloc((size + 1) * sizeof(char));
+	while (i < prev_size)
 		storage[i] = backup[i++];
 	while (i < size)
-		storage[i++] = buffer[j++]; //todo for tomorrow: eventually create way to immediately return the allocated line.
-									//-- Save last couple of characters in storage
-	return;
+		storage[i++] = buffer[j++];
+	return (i);
 }
 
 
-int	newline_checker(char *search, size_t BUFFER_SIZE)
+int	newline_checker(char *search, size_t size)
 {
 	size_t	i;
 
-	while (i <= BUFFER_SIZE)
+	while (i <= size)
 	{
 		if (search[i] == '\n')
 			return (i);
 		i++;
 	}
 	return (0);
-}
-
-
-void	buffer_status (int newline, int READ_STATUS, size_t size)
-{
-	if
-}
-
-void saveline(char *buffer, char *dest, int newline_pos)
-{
-	int i;
-
-	while (buffer[i] != '\n')
 }
