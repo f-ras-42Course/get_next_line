@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 21:17:21 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 23:00:42 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,9 @@ char	*get_next_line(int fd)
 	size_t		size;
 
 	size = buffering(buffer, storage, fd, BUFFER_SIZE);
+	if (size <= 0)
+		return (NULL);
 	line = extract_line(storage, leftover[fd], size);
-}
-
-char *extract_line(char *source, char *leftover, size_t size)
-{
-	char	*line;
-	size_t	newline_pos;
-
-	newline_pos = newline_checker(source, size);
-	if (!newline_pos)
-	{
-		leftover = 0;
-		return (source);
-	}
-	to_string_alloc(source, line, newline_pos);
-	to_string_alloc(source[newline_pos], leftover, size - newline_pos);
-	return (line);
 }
 
 size_t	buffering(char *buffer, char *dest, int fd, size_t BUFFER_SIZE)
@@ -54,62 +40,34 @@ size_t	buffering(char *buffer, char *dest, int fd, size_t BUFFER_SIZE)
 	{
 		size += READ_STATUS;
 		newline = newline_checker(buffer, size);
-		save_buffer(buffer, dest, prev_size, size);
+		if(!save_buffer(buffer, dest, prev_size, size))
+			return(0);
 		prev_size = size;
 		READ_STATUS = read(fd, buffer, size);
 	}
-	if (READ_STATUS == -1)
-		return (-1);
 	return (size);
 }
 
-void	save_buffer(char *buffer, char *dest, size_t prev_size, size_t size)
+char	*save_buffer(char *buffer, char *dest, size_t prev_size, size_t size)
 {
 	if (!prev_size)
-		to_string_alloc(buffer, dest, size);
-	to_string_realloc(buffer, dest, prev_size, size);
+		return(to_string_alloc(buffer, dest, size));
+	return(to_string_realloc(buffer, dest, size));
 }
 
-void	to_string_alloc(char *src, char *dest, size_t size)
+
+char *extract_line(char *source, char *leftover, size_t size)
 {
-	size_t	i;
+	char	*line;
+	size_t	newline_pos;
 
-	i = 0;
-	dest = malloc((size + 1) * sizeof(char));
-	while (i < size)
-			dest[i] = src[i++];
-	dest[i] = '\0';
-}
-
-void	to_string_realloc(char *src, char *dest, size_t prev_size, size_t size)
-{
-	char	*backup;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	backup = malloc(prev_size * sizeof(char));
-	while (i < prev_size)
-		backup[i] = dest[i++];
-	free (dest);
-	dest = malloc((size + 1) * sizeof(char));
-	while (i < prev_size)
-		dest[i] = backup[i++];
-	while (i < size)
-		dest[i++] = src[j++];
-	dest[i] = '\0';
-}
-
-size_t	newline_checker(char *search, size_t size)
-{
-	size_t	i;
-
-	while (i <= size)
+	newline_pos = newline_checker(source, size);
+	if (!newline_pos)
 	{
-		if (search[i] == '\n')
-			return (i);
-		i++;
+		leftover = 0;
+		return (source);
 	}
-	return (0);
+	to_string_alloc(source, line, newline_pos);
+	to_string_alloc(source[newline_pos], leftover, size - newline_pos);
+	return (line);
 }

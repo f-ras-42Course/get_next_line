@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 21:19:36 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 22:56:04 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,15 @@ void	to_string_alloc(char *src, char *dest, size_t size)
 
 	i = 0;
 	dest = malloc((size + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
 	while (i < size)
 			dest[i] = src[i++];
 	dest[i] = '\0';
+	return (dest);
 }
 
-void	to_string_realloc(char *src, char *dest, size_t prev_size, size_t size)
+void	to_string_realloc(char *src, char *dest, size_t size)
 {
 	char	*backup;
 	size_t	i;
@@ -44,14 +47,39 @@ void	to_string_realloc(char *src, char *dest, size_t prev_size, size_t size)
 
 	i = 0;
 	j = 0;
-	backup = malloc(prev_size * sizeof(char));
-	while (i < prev_size)
-		backup[i] = dest[i++];
-	free (dest);
-	dest = malloc((size + 1) * sizeof(char));
-	while (i < prev_size)
+	backup = reallocate(src, dest, size);
+	if (!backup)
+		free(dest);
+	while (backup[i])
 		dest[i] = backup[i++];
 	while (i < size)
 		dest[i++] = src[j++];
 	dest[i] = '\0';
+	free(backup);
+	return (dest);
+}
+
+char	*reallocate(char *src, char *dest, size_t size);
+{
+	char	*backup;
+	size_t	i;
+
+	i = 0;
+	backup = malloc((size + 1) * sizeof(char));
+	if (!backup)
+	{
+		free(dest);
+		return (NULL);
+	}
+	while (dest[i])
+		backup[i] = dest[i++];
+	backup[i] = '\0';
+	free (dest);
+	dest = malloc((size + 1) * sizeof(char));
+	if (!dest)
+	{
+		free(backup);
+		return(NULL);
+	}
+	return (backup);
 }
