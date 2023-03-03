@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 21:04:57 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/03 21:08:03 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ char	*get_next_line(int fd)
 {
 	static char	*leftover[OPEN_MAX];
 	char		buffer[BUFFER_SIZE];
-	char		*saved_read;
+	char		*storage;
 	char		*line;
 	size_t		size;
 
-	size = buffering(saved_read, fd, buffer, BUFFER_SIZE);
-	line = extract_line(saved_read, leftover[fd], size);
+	size = buffering(buffer, storage, fd, BUFFER_SIZE);
+	line = extract_line(storage, leftover[fd], size);
 }
 
 char *extract_line(char *source, char *leftover, size_t size)
@@ -44,10 +44,10 @@ char *extract_line(char *source, char *leftover, size_t size)
 		return (source);
 	}
 	line = malloc((newline_position + 1) * sizeof(char))
-	
+	to_string_alloc()
 }
 
-size_t	buffering(char *dest, int fd, char *buffer, size_t BUFFER_SIZE)
+size_t	buffering(char *buffer, char *dest, int fd, size_t BUFFER_SIZE)
 {
 	size_t	READ_STATUS;
 	size_t	size;
