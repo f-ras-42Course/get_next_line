@@ -27,7 +27,7 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-size_t	buffering(char *buffer, char *dest, int fd, size_t size)
+size_t	buffering(char *buffer, char *dest, int fd, size_t buffer_size)
 {
 	size_t	READ_STATUS;
 	size_t	size;
