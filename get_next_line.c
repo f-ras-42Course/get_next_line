@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/03 23:12:03 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/06 13:17:10 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ char	*get_next_line(int fd)
 	char		*line;
 	size_t		size;
 
-	size = buffering(buffer, storage, fd, BUFFER_SIZE);
+	size = buffering(buffer, storage, fd);
 	if (size <= 0)
 		return (NULL);
 	line = extract_line(storage, leftover[fd], size);
 	return (line);
 }
 
-size_t	buffering(char *buffer, char *dest, int fd, size_t buffer_size)
+size_t	buffering(char *buffer, char *dest, int fd)
 {
 	size_t	READ_STATUS;
 	size_t	size;
@@ -46,6 +46,8 @@ size_t	buffering(char *buffer, char *dest, int fd, size_t buffer_size)
 		prev_size = size;
 		READ_STATUS = read(fd, buffer, size);
 	}
+	if (READ_STATUS == -1)
+		return (-1);
 	return (size);
 }
 
