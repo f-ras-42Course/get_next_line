@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:46:02 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/06 15:14:44 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/06 18:02:12 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ size_t	newline_checker(char *search, size_t size);
 char	*save_buffer_alloc(char *src, char *dest, size_t size);
 char	*save_buffer_realloc(char *src, char *dest, size_t size);
 size_t	reallocate(char *dest, size_t size);
+size_t	freeing_stringcopy(size_t *dest, char *source);
 
 
 #endif

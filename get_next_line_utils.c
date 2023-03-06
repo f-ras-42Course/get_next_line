@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/06 16:01:57 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/06 18:03:53 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*save_buffer_realloc(char *src, char *dest, size_t size)
 		return (NULL);
 	while (prev_size < size)
 		dest[prev_size++] = src[i++];
-	dest[size + 1] = '\0';
+	dest[size] = '\0';
 	return (dest);
 }
 
@@ -60,7 +60,6 @@ size_t	reallocate(char *dest, size_t size)
 {
 	char 	*backup;
 	size_t	i;
-	size_t	prev_size;
 
 	i = 0;
 	if (!(backup = malloc(size * sizeof(char))))
@@ -68,16 +67,26 @@ size_t	reallocate(char *dest, size_t size)
 		free(dest);
 		return (NULL);
 	}
-	while (dest[i])
-		backup[i] = dest[i];
-	free (dest);
+	freeing_strcpy(backup, dest);
 	if (!(dest = malloc((size + 1) * sizeof(char))))
 	{
 		free(backup);
 		return(NULL);
 	}
-	while (i < prev_size)
-		dest[i] = backup[i];
-	free(backup);
-	return (prev_size);
+	return (freeing_strcpy(dest, backup));
+}
+
+size_t	freeing_strcpy(size_t *dest, char *source)
+{
+	size_t i;
+
+	i = 0;
+	while (source[i])
+	{
+		dest[i] = source[i];
+		i++;
+	}
+	dest[i] = '\0';
+	free(source);
+	return (i);
 }
