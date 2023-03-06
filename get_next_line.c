@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/06 13:17:10 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/06 15:26:40 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,27 @@ size_t	buffering(char *buffer, char *dest, int fd)
 {
 	size_t	READ_STATUS;
 	size_t	size;
-	size_t	prev_size;
-	size_t	*newline
+	size_t	*newline;
 
 	size = 0;
-	prev_size = 0;
-	READ_STATUS = read(fd, buffer, BUFFER_SIZE);
-	while (!newline && !READ_STATUS <= 0)
+	while (!newline && (READ_STATUS = read(fd, buffer, size) > 0))
 	{
 		size += READ_STATUS;
 		newline = newline_checker(buffer, size);
-		if(!save_buffer(buffer, dest, prev_size, size))
-			return(0);
-		prev_size = size;
-		READ_STATUS = read(fd, buffer, size);
+		if (size == READ_STATUS)
+		{
+			if (!save_buffer_alloc(buffer, dest, size))
+				return(0);
+		}
+		else
+		{
+			if (!save_buffer_realloc(buffer, dest, size))
+				return(0);
+		}
 	}
 	if (READ_STATUS == -1)
 		return (-1);
 	return (size);
-}
-
-char	*save_buffer(char *buffer, char *dest, size_t prev_size, size_t size)
-{
-	if (!prev_size)
-		return(to_string_alloc(buffer, dest, size));
-	return(to_string_realloc(buffer, dest, size));
 }
 
 
