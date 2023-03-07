@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/07 08:50:52 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/07 13:55:04 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ size_t	newline_checker(char *search, size_t size)
 	return (0);
 }
 
-char	*save_string_alloc(char *src, char *dest, size_t size)
+char	*save_string_alloc(char *src, size_t size)
 {
+	char	*dest;
 	size_t	i;
 
 	i = 0;
@@ -42,24 +43,13 @@ char	*save_string_alloc(char *src, char *dest, size_t size)
 	return (dest);
 }
 
-char	*save_string_realloc(char *src, char *dest, size_t size)
+char	*save_string_realloc(char *source, char *dest, size_t size)
 {
+	char 	*backup;
 	size_t	i;
 	size_t	prev_size;
 
 	i = 0;
-	if (!(prev_size = reallocate(dest, size)))
-		return (NULL);
-	while (prev_size < size)
-		dest[prev_size++] = src[i++];
-	dest[size] = '\0';
-	return (dest);
-}
-
-size_t	reallocate(char *dest, size_t size)
-{
-	char 	*backup;
-	
 	if (!(backup = malloc(size * sizeof(char))))
 	{
 		free(dest);
@@ -71,7 +61,11 @@ size_t	reallocate(char *dest, size_t size)
 		free(backup);
 		return(0);
 	}
-	return (freeing_strcpy(dest, backup));
+	prev_size = freeing_strcpy(dest, backup);
+	while (prev_size < size)
+		dest[prev_size++] = source[i++];
+	dest[size] = '\0';
+	return (dest);
 }
 
 size_t	freeing_strcpy(char *dest, char *source)
