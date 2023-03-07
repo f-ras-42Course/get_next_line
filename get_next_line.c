@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/07 11:37:59 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/07 11:46:47 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,13 @@ char	*get_next_line(int fd)
 	static char	*leftover[OPEN_MAX];
 	char		buffer[BUFFER_SIZE]; // eventually in buffering function
 	char		*storage;
-	char		*line;
 	size_t		size;
 
 	if(!(storage = malloc(0)))
 		return (NULL);
-	size = buffering(buffer, storage, fd);
-	if (!size)
+	if (!(size = buffering(buffer, storage, fd)))
 		return (NULL);
-	line = extract_line(storage, leftover[fd], size);
-	return (line);
+	return (extract_line(storage, leftover[fd], size));
 }
 
 size_t	buffering(char *buffer, char *dest, int fd)
