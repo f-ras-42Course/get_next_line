@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/07 14:00:31 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/07 16:39:24 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,16 @@ char	*get_next_line(int fd)
 {
 	static char	*leftover[OPEN_MAX];
 	char		*storage;
-	size_t		size;
 
-	if(!(storage = malloc(0)))
+	if (!(storage = buffering(fd)))
 		return (NULL);
-	if (!(size = buffering(&storage, fd)))
-		return (NULL);
-	return (extract_line(storage, &leftover[fd], size));
+	return (extract_line(storage, &leftover[fd]));
 }
 
-size_t	buffering(char **dest, int fd)
+char	*buffering(int fd)
 {
 	char	buffer[BUFFER_SIZE];
+	char	*stored_read;
 	int		READ_STATUS;
 	size_t	size;
 	size_t	newline;
@@ -40,31 +38,32 @@ size_t	buffering(char **dest, int fd)
 		newline = newline_checker(buffer, size);
 		if (size == (size_t)READ_STATUS)
 		{
-			if (!(*dest = save_string_alloc(buffer, size)))
-				return(0);
+			if (!(stored_read = save_alloc_string(buffer, size)))
+				return(NULL);
 		}
 		else
 		{
-			if (!(*dest = save_string_realloc(buffer, *dest, size)))
-				return(0);
+			if (!(stored_read = save_string_realloc(buffer, stored_read, size)))
+				return(NULL);
 		}
 	}
 	if (READ_STATUS == -1)
-		return (0);
-	return (size);
+		return (NULL);
+	return (stored_read);
 }
 
-char	*extract_line(char *source, char **leftover, size_t size)
+char	*extract_line(char *source, char **leftover)
 {
 	char	*line;
 	size_t	newline_pos;
 
-	if (!(newline_pos = newline_checker(source, size)))
+	if (!(newline_pos = newline_checker(source, 0)))
 	{
 		leftover = 0;
 		return (source);
 	}
-	line = save_string_alloc(source, newline_pos);
-	*leftover = save_string_alloc(source + newline_pos, size - newline_pos); // need to free leftofver.
+	line = save_alloc_string(source, newline_pos);
+	*leftover = copy_string(*leftover, source + newline_pos);
+	free(source);
 	return (line);
 }
