@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/06 18:03:53 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/07 08:21:48 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,22 @@ char	*save_buffer_realloc(char *src, char *dest, size_t size)
 size_t	reallocate(char *dest, size_t size)
 {
 	char 	*backup;
-	size_t	i;
-
-	i = 0;
+	
 	if (!(backup = malloc(size * sizeof(char))))
 	{
 		free(dest);
-		return (NULL);
+		return (0);
 	}
 	freeing_strcpy(backup, dest);
 	if (!(dest = malloc((size + 1) * sizeof(char))))
 	{
 		free(backup);
-		return(NULL);
+		return(0);
 	}
 	return (freeing_strcpy(dest, backup));
 }
 
-size_t	freeing_strcpy(size_t *dest, char *source)
+size_t	freeing_strcpy(char *dest, char *source)
 {
 	size_t i;
 
