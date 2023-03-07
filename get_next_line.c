@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/07 08:18:10 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/07 08:26:34 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_next_line(int fd)
 {
 	static char	*leftover[OPEN_MAX];
-	char		buffer[BUFFER_SIZE]; // eventually in buffering function
+	char		buffer[BUFFER_SIZE];
 	char		*storage;
 	char		*line;
 	size_t		size;
