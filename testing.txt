@@ -1,6 +1,6 @@
 Hallo mijn naam is Ferry
 Dit is een nieuwe lijn en dit nogsteeds.
-Maar wat nou als de lijne te voor de lang standaard buffer is? Laten we eens kijken hoe we dat handelen.
+Maar wat nou als de lijn te voor de lang standaard buffer is? Laten we eens kijken hoe we dat handelen.
 Ah! Helemaal goedgekomen.
 Top.
 

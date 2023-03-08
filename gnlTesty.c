@@ -6,12 +6,12 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/28 21:57:30 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/07 09:53:03 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/08 16:16:00 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <fcntl.h>
 
 int	main(void)
@@ -26,9 +26,12 @@ int	main(void)
         exit(EXIT_FAILURE);
     }
     printf("File opened successfully\n");
-	ptr = get_next_line(fd);
-	printf("%s", ptr);
-	free(ptr);
+	for (size_t i = 0; i < 4; i++)
+	{
+		ptr = get_next_line(fd);
+		printf("%s", ptr);
+		free(ptr);
+	}
 	close(fd);
 	return (0);
 }
