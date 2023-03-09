@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/08 16:10:09 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/09 12:04:06 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,17 @@ char	*get_next_line(int fd)
 {
 	static char	leftover[OPEN_MAX][BUFFER_SIZE];
 	char		*storage;
+	char		*line;
 
 	if (!(storage = buffering(fd)))
+	{
+		if (*leftover[fd])
+			return (extract_line(leftover[fd], leftover[fd]));
 		return (NULL);
-	return (extract_line(storage, leftover[fd]));
+	}
+	line = extract_line(storage, leftover[fd]);
+	free(storage);
+	return (line);
 }
 
 char	*buffering(int fd)
@@ -47,7 +54,7 @@ char	*buffering(int fd)
 				return(NULL);
 		}
 	}
-	if (bytes_read == -1)
+	if ((bytes_read <= 0 && size == 0) || bytes_read == -1)
 		return (NULL);
 	return (stored_read);
 }
@@ -59,12 +66,8 @@ char	*extract_line(char *source, char *leftover)
 	size_t	leftover_size;
 
 	leftover_size = 0;
-	if (!(newline_pos = newline_checker(source, 0)))
-	{
-		leftover = NULL;
-		return (source);
-	}
-	if (leftover)
+	newline_pos = newline_checker(source, 0);
+	if (leftover && (source != leftover))
 	{
 
 		while (leftover[leftover_size])
@@ -75,6 +78,5 @@ char	*extract_line(char *source, char *leftover)
 	else
 		line = save_alloc_string(source, newline_pos);
 	copy_string(leftover, &source[newline_pos]);
-	free(source);
 	return (line);
 }
