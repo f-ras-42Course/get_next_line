@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/09 12:25:06 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/10 22:49:19 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,36 @@ char	*extract_line(char *source, char *leftover)
 
 	leftover_size = 0;
 	newline_pos = newline_checker(source, 0);
-	if (leftover && (source != leftover))
-	{
-
-		while (leftover[leftover_size])
+	while (leftover[leftover_size])
 			leftover_size++;
-		line = save_alloc_string(leftover, leftover_size);
-		line = save_string_realloc(source, line, leftover_size + newline_pos);
+	if (newline_pos)
+	{
+		if (leftover && (source != leftover))
+		{
+			line = save_alloc_string(leftover, leftover_size);
+			line = save_string_realloc(source, line, leftover_size + newline_pos);
+		}
+		else
+			line = save_alloc_string(source, newline_pos);
+		copy_string(leftover, &source[newline_pos]);
 	}
 	else
-		line = save_alloc_string(source, newline_pos);
-	copy_string(leftover, &source[newline_pos]);
+	{
+		if (leftover && (source != leftover))
+		{
+			line = save_alloc_string(leftover, leftover_size);
+			while (source[leftover_size])
+				leftover_size++;
+			line = save_string_realloc(source, line, leftover_size);
+		}
+		else
+		{
+			while (source[leftover_size])
+				leftover_size++;
+			line = save_alloc_string(source, leftover_size);
+		}
+		copy_string(leftover, &source[leftover_size]);
+		
+	}
 	return (line);
 }
