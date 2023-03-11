@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/28 21:57:30 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/08 16:16:00 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/09 12:04:45 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(void)
         exit(EXIT_FAILURE);
     }
     printf("File opened successfully\n");
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 12; i++)
 	{
 		ptr = get_next_line(fd);
 		printf("%s", ptr);
