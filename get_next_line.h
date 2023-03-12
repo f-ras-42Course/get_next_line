@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:46:02 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/12 01:55:14 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/12 02:08:46 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
-
-# define BUFFER_SIZE 32
 
 char	*get_next_line(int fd);
 size_t	retrieve_leftover(char **dest, char *leftover);
