@@ -6,13 +6,13 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:41 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/09 12:05:09 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/12 01:57:05 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	newline_checker(char *search, size_t size)
+size_t	find_newline(char *search, size_t size)
 {
 	size_t	i;
 
@@ -26,7 +26,7 @@ size_t	newline_checker(char *search, size_t size)
 			i++;
 		}
 	}
-	while (i <= size)
+	while (i < size)
 	{
 		if (search[i] == '\n')
 			return (++i);
@@ -41,12 +41,13 @@ char	*save_alloc_string(char *src, size_t size)
 	size_t	i;
 
 	i = 0;
-	if (!(dest = malloc((size + 1) * sizeof(char))))
+	dest = malloc((size + 1) * sizeof(char));
+	if (!dest)
 		return (NULL);
 	while (i < size)
 	{
-			dest[i] = src[i];
-			i++;
+		dest[i] = src[i];
+		i++;
 	}
 	dest[i] = '\0';
 	return (dest);
@@ -54,27 +55,26 @@ char	*save_alloc_string(char *src, size_t size)
 
 char	*save_string_realloc(char *source, char *dest, size_t size)
 {
-	char 	*backup;
+	char	*backup;
 	size_t	i;
 	size_t	prev_size;
 
 	i = 0;
-	prev_size = 0;
-	while (dest[prev_size])
-		prev_size++;
-	if (!(backup = malloc((prev_size + 1) * sizeof(char))))
+	backup = malloc((size + 1) * sizeof(char));
+	if (!backup)
 	{
 		free(dest);
-		return (0);
+		return (NULL);
 	}
-	copy_string(backup, dest);
+	sizeof_stringcopy(backup, dest);
 	free(dest);
-	if (!(dest = malloc((size + 1) * sizeof(char))))
+	dest = malloc((size + 1) * sizeof(char));
+	if (!dest)
 	{
 		free(backup);
-		return(0);
+		return (NULL);
 	}
-	copy_string(dest, backup);
+	prev_size = sizeof_stringcopy(dest, backup);
 	free(backup);
 	while (prev_size < size)
 		dest[prev_size++] = source[i++];
@@ -82,9 +82,9 @@ char	*save_string_realloc(char *source, char *dest, size_t size)
 	return (dest);
 }
 
-char	*copy_string(char *dest, char *source)
+size_t	sizeof_stringcopy(char *dest, char *source)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (source[i])
@@ -93,5 +93,5 @@ char	*copy_string(char *dest, char *source)
 		i++;
 	}
 	dest[i] = '\0';
-	return (dest);
+	return (i);
 }

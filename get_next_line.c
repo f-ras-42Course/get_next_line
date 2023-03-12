@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/10 22:49:19 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/12 01:54:23 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,87 +16,72 @@ char	*get_next_line(int fd)
 {
 	static char	leftover[OPEN_MAX][BUFFER_SIZE];
 	char		*storage;
-	char		*line;
+	size_t		len;
+	size_t		newline_pos;
 
-	if (!(storage = buffering(fd)))
-	{
-		if (*leftover[fd])
-			return (extract_line(leftover[fd], leftover[fd]));
+	len = retrieve_leftover(&storage, leftover[fd]);
+	if (!storage)
 		return (NULL);
-	}
-	line = extract_line(storage, leftover[fd]);
-	free(storage);
-	return (line);
+	newline_pos = find_newline(storage, len);
+	if (newline_pos)
+		return (extract_line(storage, leftover[fd], newline_pos));
+	len = buffering(fd, &storage, len);
+	if (!storage)
+		return (NULL);
+	newline_pos = find_newline(storage, len);
+	if (newline_pos)
+		return (extract_line(storage, leftover[fd], newline_pos));
+	return (storage);
 }
 
-char	*buffering(int fd)
+size_t	retrieve_leftover(char **dest, char *leftover)
+{
+	size_t	leftover_size;
+
+	leftover_size = 0;
+	while (leftover[leftover_size])
+		leftover_size++;
+	*dest = save_alloc_string(leftover, leftover_size);
+	if (!*dest)
+		return (0);
+	*leftover = '\0';
+	return (leftover_size);
+}
+
+size_t	buffering(int fd, char **stored_read, size_t old_size)
 {
 	char	buffer[BUFFER_SIZE];
-	char	*stored_read;
 	int		bytes_read;
 	size_t	size;
 	size_t	newline;
 
-	size = 0;
+	size = old_size;
 	newline = 0;
-	while (!newline && ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0))
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	while (!newline && bytes_read > 0)
 	{
 		size += bytes_read;
-		newline = newline_checker(buffer, size);
-		if (size == (size_t)bytes_read)
-		{
-			if (!(stored_read = save_alloc_string(buffer, size)))
-				return(NULL);
-		}
-		else
-		{
-			if (!(stored_read = save_string_realloc(buffer, stored_read, size)))
-				return(NULL);
-		}
+		newline = find_newline(buffer, BUFFER_SIZE);
+		*stored_read = save_string_realloc(buffer, *stored_read, size);
+		if (!*stored_read)
+			return (0);
+		if (!newline)
+			bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	if ((bytes_read <= 0 && size == 0) || bytes_read == -1)
-		return (NULL);
-	return (stored_read);
+	if (bytes_read == -1)
+	{
+		*stored_read = NULL;
+		return (0);
+	}
+	return (size);
 }
 
-char	*extract_line(char *source, char *leftover)
+char	*extract_line(char *source, char *leftover, size_t len)
 {
 	char	*line;
-	size_t	newline_pos;
-	size_t	leftover_size;
 
-	leftover_size = 0;
-	newline_pos = newline_checker(source, 0);
-	while (leftover[leftover_size])
-			leftover_size++;
-	if (newline_pos)
-	{
-		if (leftover && (source != leftover))
-		{
-			line = save_alloc_string(leftover, leftover_size);
-			line = save_string_realloc(source, line, leftover_size + newline_pos);
-		}
-		else
-			line = save_alloc_string(source, newline_pos);
-		copy_string(leftover, &source[newline_pos]);
-	}
-	else
-	{
-		if (leftover && (source != leftover))
-		{
-			line = save_alloc_string(leftover, leftover_size);
-			while (source[leftover_size])
-				leftover_size++;
-			line = save_string_realloc(source, line, leftover_size);
-		}
-		else
-		{
-			while (source[leftover_size])
-				leftover_size++;
-			line = save_alloc_string(source, leftover_size);
-		}
-		copy_string(leftover, &source[leftover_size]);
-		
-	}
+	sizeof_stringcopy(leftover, &source[len]);
+	line = save_alloc_string(source, len);
+	free(source);
 	return (line);
 }
