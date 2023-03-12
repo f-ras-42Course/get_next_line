@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/12 02:16:46 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/12 02:34:43 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*get_next_line(int fd)
 	size_t		len;
 	size_t		newline_pos;
 
+	if (fd < 0 || fd >= OPEN_MAX)
+		return (NULL);
 	len = retrieve_leftover(&storage, leftover[fd]);
 	if (!storage)
 		return (NULL);
