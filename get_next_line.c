@@ -6,7 +6,7 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:45:53 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/12 02:14:07 by fras          ########   odam.nl         */
+/*   Updated: 2023/03/12 02:16:46 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*get_next_line(int fd)
 	if (!*storage)
 	{
 		free(storage);
-		return(NULL);
+		return (NULL);
 	}
 	return (storage);
 }
