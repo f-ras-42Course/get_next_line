@@ -6,12 +6,16 @@
 /*   By: fras <fras@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/26 18:46:02 by fras          #+#    #+#                 */
-/*   Updated: 2023/03/12 02:08:46 by fras          ########   odam.nl         */
+/*   Updated: 2023/05/04 21:43:18 by fras          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
 
 # include <stdlib.h>
 # include <unistd.h>
