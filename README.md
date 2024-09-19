@@ -21,8 +21,6 @@ This implementation has been optimized to:
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -171,12 +169,4 @@ You can test with custom buffer sizes using the command:
 ```
 ---
 
-## Contributing
-
-If you wish to contribute to this project, feel free to fork the repository, create a new branch, and submit a pull request. Ensure that your code follows the project’s coding standards and passes all tests.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+Made by Ferry
