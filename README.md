@@ -148,7 +148,6 @@ get_next_line/
 ├── get_next_line.c          # Main function implementation
 ├── get_next_line_utils.c    # Helper functions
 ├── get_next_line.h          # Header file with prototypes
-├── Makefile                 # Compilation rules
 └── README.md                # Project documentation
 ```
 
